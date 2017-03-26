@@ -1,0 +1,256 @@
+{
+  "intents": [
+    {
+      "intent": "AMAZON.ResumeIntent"
+    },
+    {
+      "intent": "AMAZON.PauseIntent"
+    },
+    {
+      "intent": "add",
+      "slots": [
+        {
+          "name": "dest",
+          "type": "vars"
+        },
+        {
+          "name": "var",
+          "type": "vars"
+        },
+        {
+          "name": "num",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "subtract",
+      "slots": [
+        {
+          "name": "dest",
+          "type": "vars"
+        },
+        {
+          "name": "var",
+          "type": "vars"
+        },
+        {
+          "name": "num",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "divide",
+      "slots": [
+        {
+          "name": "dest",
+          "type": "vars"
+        },
+        {
+          "name": "var",
+          "type": "vars"
+        },
+        {
+          "name": "num",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "multiply",
+      "slots": [
+        {
+          "name": "dest",
+          "type": "vars"
+        },
+        {
+          "name": "var",
+          "type": "vars"
+        },
+        {
+          "name": "num",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "assign",
+      "slots": [
+        {
+          "name": "dest",
+          "type": "vars"
+        },
+        {
+          "name": "var",
+          "type": "vars"
+        },
+        {
+          "name": "num",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "assign_operation",
+      "slots": [
+        {
+          "name": "op",
+          "type": "expression"
+        },
+        {
+          "name": "dest",
+          "type": "vars"
+        },
+        {
+          "name": "var_a",
+          "type": "vars"
+        },
+        {
+          "name": "var_b",
+          "type": "vars"
+        },
+        {
+          "name": "num_a",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "num_b",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "startrepeat",
+      "slots": [
+        {
+          "name": "limit",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "endrepeat"
+    },
+    {
+      "intent": "finish"
+    },
+    {
+      "intent": "say",
+      "slots": [
+        {
+          "name": "output",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "intent": "condition_eq",
+      "slots": [
+        {
+          "name": "var_a",
+          "type": "vars"
+        },
+        {
+          "name": "var_b",
+          "type": "vars"
+        },
+        {
+          "name": "num_a",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "num_b",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "condition_ne",
+      "slots": [
+        {
+          "name": "var_a",
+          "type": "vars"
+        },
+        {
+          "name": "var_b",
+          "type": "vars"
+        },
+        {
+          "name": "num_a",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "num_b",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "condition_lt",
+      "slots": [
+        {
+          "name": "var_a",
+          "type": "vars"
+        },
+        {
+          "name": "var_b",
+          "type": "vars"
+        },
+        {
+          "name": "num_a",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "num_b",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "condition_gt",
+      "slots": [
+        {
+          "name": "var_a",
+          "type": "vars"
+        },
+        {
+          "name": "var_b",
+          "type": "vars"
+        },
+        {
+          "name": "num_a",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "num_b",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
+    },
+    {
+      "intent": "endif"
+    },
+    {
+      "intent": "play_audio",
+      "slots": [
+        {
+          "name": "animal",
+          "type": "animals"
+        }
+      ]
+    },
+    {
+      "intent": "print",
+      "slots": [
+        {
+          "name": "var",
+          "type": "vars"
+        }
+      ]
+    },
+    {
+      "intent": "challenge"
+    }
+  ]
+}

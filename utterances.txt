@@ -1,0 +1,66 @@
+add add {num} to {dest}
+add add {num} plus {dest}
+subtract subtract {num} from {dest}
+subtract reduce {dest} by {num}
+divide divide {dest} by {num}
+multiply multiply {dest} by {num}
+multiply multiply {dest} by {var}
+assign assign {dest} to {num}
+assign {dest} equals {num}
+assign put {num} into {dest}
+assign put {num} in {dest}
+assign put {var} into {dest}
+assign put {var} in {dest}
+assign_operation assign {dest} equals {num_a} {op} {num_b}
+assign_operation assign {dest} equals {var_a} {op} {num_b}
+assign_operation assign {dest} equals {num_a} {op} {var_b}
+assign_operation assign {dest} equals {var_a} {op} {var_b}
+assign_operation assign {num_a} {op} {num_b} to {dest}
+assign_operation assign {var_a} {op} {num_b} to {dest}
+assign_operation assign {num_a} {op} {var_b} to {dest}
+assign_operation assign {var_a} {op} {var_b} to {dest}
+assign_operation {dest} equals {num_a} {op} {num_b}
+assign_operation {dest} equals {var_a} {op} {num_b}
+assign_operation {dest} equals {num_a} {op} {var_b}
+assign_operation {dest} equals {var_a} {op} {var_b}
+startrepeat repeat {limit} times
+startrepeat repeat for {limit} times
+startrepeat repeat this {limit} times
+startrepeat repeat this for {limit} times
+startrepeat do this {limit} times
+startrepeat do this for {limit} times
+startrepeat do {limit} times
+startrepeat do for {limit} times
+endrepeat thats it
+endrepeat end repeat
+finish finish
+finish done
+finish exit
+finish quit
+finish quit program
+finish exit program
+say say {output}
+say output {output}
+condition_eq if {var_a} is {num_b} then
+condition_eq if {num_a} is {var_b} then
+condition_eq if {var_a} is {var_b} then
+condition_eq if {num_a} is {num_b} then
+condition_ne if {var_a} is not {num_b} then
+condition_ne if {num_a} is not {var_b} then
+condition_ne if {var_a} is not {var_b} then
+condition_ne if {num_a} is not {num_b} then
+condition_lt if {var_a} is less than {num_b} then
+condition_lt if {num_a} is less than {var_b} then
+condition_lt if {var_a} is less than {var_b} then
+condition_lt if {num_a} is less than {num_b} then
+condition_gt if {var_a} is greater than {num_b} then
+condition_gt if {num_a} is greater than {var_b} then
+condition_gt if {var_a} is greater than {var_b} then
+condition_gt if {num_a} is greater than {num_b} then
+endif end if
+play_audio play {animal}
+play_audio play {animal} sound
+print what is {var}
+print print {var}
+challenge What should I do
+challenge Hit me with a challenge
