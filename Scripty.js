@@ -8,6 +8,8 @@
  * as testing instructions are located at https://github.com/alexa/skill-sample-nodejs-fact
  **/
 
+// Changes not gonna work with this here
+// Not gonna work in general...
 'use strict';
 
 const Alexa = require('alexa-sdk');
@@ -54,27 +56,27 @@ const languageStrings = {
     }
 };
 
-function vars(ctxt) {
-    if (!('vars' in ctxt.event.session.attributes))
-        ctxt.event.session.attributes['vars'] = {};
-    return ctxt.event.session.attributes.vars;
-}
+var vars = function() {
+    if (!('vars' in this.event.session.attributes))
+        this.event.session.attributes['vars'] = {};
+    return this.event.session.attributes.vars;
+}.bind(this);
 
-function slots(ctxt) {
-    return ctxt.event.request.intent.slots;
-}
+var slots = function() {
+    return this.event.request.intent.slots;
+}.bind(this);
 
-function sv(ctxt, v) {
-    return ctxt.event.request.intent.slots[v].value;
-}
+var sv = function(v) {
+    return this.event.request.intent.slots[v].value;
+}.bind(this);
 
-function remember(ctxt, stmt) {
-    ctxt.event.session.attributes["repeat"].push(stmt);
-}
+var remember = function(stmt) {
+    this.event.session.attributes["repeat"].push(stmt);
+}.bind(this);
 
-function isRepeat(ctxt) {
-    return ("repeat_limit" in ctxt.event.session.attributes && ctxt.event.session.attributes["repeat_limit"] !== 0);
-}
+var isRepeat = function() {
+    return ("repeat_limit" in this.event.session.attributes && this.event.session.attributes["repeat_limit"] !== 0);
+}.bind(this)
 
 /*
 stmt: {
@@ -91,66 +93,66 @@ function isNum(str) {
     return !isNaN(str);
 }
 
-function do_arith(t, op, a, b, d) {
+var do_arith = function(op, a, b, d) {
     function get(v) {
         if (isNum(v))
             return parseInt(v);
         else
-            return vars(t)[v];
+            return vars()[v];
     }
 
-    if (!(d in vars(t)))
-        vars(t)[d] = 0;
+    if (!(d in vars()))
+        vars()[d] = 0;
 
     var a_ = get(a);
     var b_ = get(b);
 
     switch (op) {
         case '+': {
-            vars(t)[d] = a_ + b_;
+            vars()[d] = a_ + b_;
         } break;
 
         case '-': {
-            vars(t)[d] = a_ - b_;
+            vars()[d] = a_ - b_;
         } break;
 
         case '*': {
-            vars(t)[d] = a_ * b_;
+            vars()[d] = a_ * b_;
         } break;
 
         case '/': {
-            vars(t)[d] = a_ / b_;
+            vars()[d] = a_ / b_;
         } break;
 
         case '%': {
-            vars(t)[d] = a_ % b_;
+            vars()[d] = a_ % b_;
         } break;
 
         default:
             break;
     }
-}
+}.bind(this);
 
 const handlers = {
     // Y @= h;
     'add': function () {
         var a, d;
         var e = this.event;
-        if ('value' in slots(this)['num'])
-            a = sv(this, 'num');
-        else if ('value' in slots(this)['var'])
-            a = sv(this, 'var');
+        if ('value' in slots()['num'])
+            a = sv('num');
+        else if ('value' in slots()['var'])
+            a = sv('var');
 
-        d = sv(this, "dest");
+        d = sv("dest");
         var notif = "";
 
-        if (isRepeat(this)) {
+        if (isRepeat()) {
             let obj = { '+': { 'a': d, 'b': a, 'd': d } };
-            remember(this, obj);
+            remember(obj);
         }
         else if(!e.session.attributes["selection"] || e.session.attributes["comparison"]){
-            do_arith(this, '+', a, d, d);
-            notif = "Added " + a + " to " + d + '. ' + d + ' is now ' + vars(this)[d] + '.';
+            do_arith('+', a, d, d);
+            notif = "Added " + a + " to " + d + '. ' + d + ' is now ' + vars()[d] + '.';
         }
         
         const re_prompt = this.t('RE_PROMPTS')[rand(4)];
@@ -163,21 +165,21 @@ const handlers = {
     'subtract': function () {
         var a, d;
         var e = this.event;
-        if ('value' in slots(this)['num'])
-            a = sv(this, 'num');
-        else if ('value' in slots(this)['var'])
-            a = sv(this, 'var');
+        if ('value' in slots()['num'])
+            a = sv('num');
+        else if ('value' in slots()['var'])
+            a = sv('var');
 
         // [d] -= a
-        d = sv(this, "dest");
+        d = sv("dest");
         var notif = " ";
-        if (isRepeat(this)) {
+        if (isRepeat()) {
             let obj = { '-': { 'a': d, 'b': a, 'd': d } };
-            remember(this, obj);
+            remember(obj);
         }
         else if(!e.session.attributes["selection"] || e.session.attributes["comparison"]){
-            do_arith(this, '-', a, d, d);
-            notif = "Subtracted " + a + " from " + d + '. ' + d + ' is now ' + vars(this)[d] + '.';
+            do_arith('-', a, d, d);
+            notif = "Subtracted " + a + " from " + d + '. ' + d + ' is now ' + vars()[d] + '.';
         }
 
         const re_prompt = this.t('RE_PROMPTS')[rand(4)]
@@ -190,14 +192,14 @@ const handlers = {
     'multiply': function () {
         var a, d;
         var e = this.event;
-        if ('value' in slots(this)['num'])
-            a = sv(this, 'num');
-        else if ('value' in slots(this)['var'])
-            a = sv(this, 'var');
+        if ('value' in slots()['num'])
+            a = sv('num');
+        else if ('value' in slots()['var'])
+            a = sv('var');
 
-        d = sv(this, "dest");  
+        d = sv("dest");  
         var notif = " ";
-        if (isRepeat(this)) {
+        if (isRepeat()) {
             let obj = {
                 '*': {
                     'a': d,
@@ -205,12 +207,12 @@ const handlers = {
                     'd': d
                 }
             };
-            remember(this, obj);
+            remember(obj);
         }
         else if(!e.session.attributes["selection"] || e.session.attributes["comparison"]) {
             // [d] *= a
-            do_arith(this, '*', a, d, d);
-            notif = "Multiplied " + a + " by " + d + '. ' + d + ' is now ' + vars(this)[d] + '.';
+            do_arith('*', a, d, d);
+            notif = "Multiplied " + a + " by " + d + '. ' + d + ' is now ' + vars()[d] + '.';
         }
 
         var re_prompt = this.t('RE_PROMPTS')[rand(4)]
@@ -224,21 +226,21 @@ const handlers = {
     'divide': function () {
         var a, d;
         var e = this.event;
-        if ('value' in slots(this)['num'])
-            a = sv(this, 'num');
-        else if ('value' in slots(this)['var'])
-            a = sv(this, 'var');
+        if ('value' in slots()['num'])
+            a = sv('num');
+        else if ('value' in slots()['var'])
+            a = sv('var');
 
         // [d] /= a
-        d = sv(this, "dest");
+        d = sv("dest");
         var notif = " ";
-        if (isRepeat(this)) {
+        if (isRepeat()) {
             let obj = { '/': { 'a': d, 'b': a, 'd': d } };
-            remember(this, obj);
+            remember(obj);
         }
         else if(!e.session.attributes["selection"] || e.session.attributes["comparison"]){
-            do_arith(this, '/', a, d, d);
-            notif = "Divided " + a + " by " + d + '. ' + d + ' is now ' + vars(this)[d] + '.';
+            do_arith('/', a, d, d);
+            notif = "Divided " + a + " by " + d + '. ' + d + ' is now ' + vars()[d] + '.';
         }
 
         var re_prompt = this.t('RE_PROMPTS')[rand(4)]
@@ -252,20 +254,20 @@ const handlers = {
     'assign': function () {
         var src, d;
         var e = this.event;
-        if ('value' in slots(this)['num'])
-            src = sv(this, 'num');
+        if ('value' in slots()['num'])
+            src = sv('num');
         else
-            src = sv(this, 'var');
+            src = sv('var');
 
-        d = sv(this, 'dest');
+        d = sv('dest');
         var notif = " ";
-        if (isRepeat(this)) {
+        if (isRepeat()) {
             let obj = { '+': { 'a': src, 'b': '0', 'd': d } }
-            remember(this, obj);
+            remember(obj);
         }
        else if(!e.session.attributes["selection"] || e.session.attributes["comparison"]){
-            do_arith(this, '+', src, '0', d);
-            notif = 'Done. ' + d + ' now has ' + vars(this)[d] + '.';
+            do_arith('+', src, '0', d);
+            notif = 'Done. ' + d + ' now has ' + vars()[d] + '.';
        }
 
         var re_prompt = this.t('RE_PROMPTS')[rand(4)]
@@ -280,64 +282,46 @@ const handlers = {
     //
     'assign_operation': function () {
         function get_op(op) {
-            switch (op) {
-                case 'plus':
-                case 'added to':
-                    {
-                        return '+';
-                    } break;
-
-                case 'minus':
-                    {
-                        return '-';
-                    } break;
-
-                case 'times':
-                case 'multiplied by':
-                    {
-                        return '*';
-                    } break;
-
-                case 'over':
-                case 'divided by':
-                    {
-                        return '/';
-                    } break;
-
-                case 'modulus':
-                case 'mod':
-                    {
-                        return '%';
-                    } break;
-            }
+            if(op in ['plus', 'added to'])
+                op = '+';
+            else if(op in ['minus'])
+                op = '-';
+            else if(op in ['times', 'multiplied by'])
+                op = '*';
+            else if(op in ['over', 'divided by'])
+                op = '/';
+            else if(op in ['modulo', 'modulus', 'mod'])
+                op = '%';
+            
+            return op;
         }
 
         var a, b;
         var e = this.event;
         var notif = " ";
-        if ('value' in slots(this)['num_a'])
-            a = sv(this, 'num_a');
-        else if ('value' in slots(this)['var_a'])
-            a = sv(this, 'var_a');
+        if ('value' in slots()['num_a'])
+            a = sv('num_a');
+        else if ('value' in slots()['var_a'])
+            a = sv('var_a');
 
-        if ('value' in slots(this)['num_b'])
-            b = sv(this, 'num_b');
-        else if ('value' in slots(this)['var_b'])
-            b = sv(this, 'var_b');
+        if ('value' in slots()['num_b'])
+            b = sv('num_b');
+        else if ('value' in slots()['var_b'])
+            b = sv('var_b');
 
-        const d = sv(this, 'dest');
+        const d = sv('dest');
 
-        const op = get_op(sv(this, 'op'));
+        const op = get_op(sv('op'));
 
-        if (isRepeat(this)) {
+        if (isRepeat()) {
             let obj = {};
             obj[op] = { 'a': a, 'b': b, 'd': d };
-            remember(this, obj);
+            remember(obj);
         }
         else if(!e.session.attributes["selection"] || e.session.attributes["comparison"]){
-            do_arith(this, op, a, b, d);
+            do_arith(op, a, b, d);
             // "d now has (a @ b) which equals [d]."
-            notif = d + ' now has ' + a + ' ' + sv(this, 'op') + ' ' + b + ' which equals ' + vars(this)[d] + '.';
+            notif = d + " now has " + a + " " + sv('op') + " " + b + " which equals " + vars()[d] + ".";
         }
 
         const re_prompt = this.t('RE_PROMPTS')[rand(4)];
@@ -349,7 +333,7 @@ const handlers = {
         );
     },
     'startrepeat': function () {
-        let limit = sv(this, 'limit');
+        let limit = sv('limit');
         var e = this.event;
 
         e.session.attributes["repeat_limit"] = limit;
@@ -372,9 +356,10 @@ const handlers = {
 
         var arr = e.session.attributes["repeat"];
         let limit = parseInt(e.session.attributes["repeat_limit"]);
-        var out = " ";
+        var out = "Looping...";
+        // VERY SPESHUL!!!1!one!
         var work_counter = 0;
-        let work_file = "<audio src=\"https://s3-eu-west-1.amazonaws.com/testingaudio/work.mp3\"></audio>";
+        let work_play = '<audio src="https://s3-eu-west-1.amazonaws.com/testingaudio/work.mp3"></audio>';
         while (limit--) {
             var a, b, d, src, op, key;
             for (var j = 0; j < arr.length; j++) {
@@ -387,15 +372,15 @@ const handlers = {
                         a = arr[j][key]['a'];
                         b = arr[j][key]['b'];
                         d = arr[j][key]['d'];
-                        do_arith(this, key, a, b, d);
+                        do_arith(key, a, b, d);
                     } break;
                     case "say": {
-                        op = arr[j]['say']['out'];
-                        if(op.indexOf("work") != -1) work_counter++;
+                        word = arr[j]['say']['out'];
+                        if(word.indexOf("work") != -1) work_counter++;
                         if(work_counter == 4)
-                            out += work_file;
-                        else if(work_counter <4)
-                            out +=  (op+", ");
+                            out += work_play;
+                        else if(work_counter < 4)
+                            out += (word + ", ");
                     } break;
                     case "play": {
                         op = arr[j]['play']['file'];
@@ -430,19 +415,19 @@ const handlers = {
         var e = this.event;
         var a, b;
 
-        if ('value' in slots(this)['num_a'])
-            a = sv(this, 'num_a');
-        else if ('value' in slots(this)['var_a'])
-            a = sv(this, 'var_a');
+        if ('value' in slots()['num_a'])
+            a = sv('num_a');
+        else if ('value' in slots()['var_a'])
+            a = sv('var_a');
 
-        if ('value' in slots(this)['num_b'])
-            b = sv(this, 'num_b');
-        else if ('value' in slots(this)['var_b'])
-            b = sv(this, 'var_b');
+        if ('value' in slots()['num_b'])
+            b = sv('num_b');
+        else if ('value' in slots()['var_b'])
+            b = sv('var_b');
 
-        do_arith(this, '-', a, b, 'temporary_impossible_variable');
+        do_arith('-', a, b, 'temporary_impossible_variable');
 
-        e.session.attributes["comparison"] = vars(this)['temporary_impossible_variable'] === 0;
+        e.session.attributes["comparison"] = vars()['temporary_impossible_variable'] === 0;
         e.session.attributes["selection"] = 1; 
 
         const notif = 'Ok, comparing '+a+" to "+b;
@@ -460,19 +445,19 @@ const handlers = {
         var e = this.event;
         var a, b;
 
-        if ('value' in slots(this)['num_a'])
-            a = sv(this, 'num_a');
-        else if ('value' in slots(this)['var_a'])
-            a = sv(this, 'var_a');
+        if ('value' in slots()['num_a'])
+            a = sv('num_a');
+        else if ('value' in slots()['var_a'])
+            a = sv('var_a');
 
-        if ('value' in slots(this)['num_b'])
-            b = sv(this, 'num_b');
-        else if ('value' in slots(this)['var_b'])
-            b = sv(this, 'var_b');
+        if ('value' in slots()['num_b'])
+            b = sv('num_b');
+        else if ('value' in slots()['var_b'])
+            b = sv('var_b');
 
-        do_arith(this, '-', a, b, 'temporary_impossible_variable');
+        do_arith('-', a, b, 'temporary_impossible_variable');
 
-        e.session.attributes["comparison"] = vars(this)['temporary_impossible_variable'] !== 0;
+        e.session.attributes["comparison"] = vars()['temporary_impossible_variable'] !== 0;
         e.session.attributes["selection"] = 1;
 
         const notif = 'Ok, comparing '+a+" to "+b;
@@ -490,19 +475,19 @@ const handlers = {
         var e = this.event;
         var a, b;
 
-        if ('value' in slots(this)['num_a'])
-            a = sv(this, 'num_a');
-        else if ('value' in slots(this)['var_a'])
-            a = sv(this, 'var_a');
+        if ('value' in slots()['num_a'])
+            a = sv('num_a');
+        else if ('value' in slots()['var_a'])
+            a = sv('var_a');
 
-        if ('value' in slots(this)['num_b'])
-            b = sv(this, 'num_b');
-        else if ('value' in slots(this)['var_b'])
-            b = sv(this, 'var_b');
+        if ('value' in slots()['num_b'])
+            b = sv('num_b');
+        else if ('value' in slots()['var_b'])
+            b = sv('var_b');
 
-        do_arith(this, '-', a, b, 'temporary_impossible_variable');
+        do_arith('-', a, b, 'temporary_impossible_variable');
 
-        e.session.attributes["comparison"] = vars(this)['temporary_impossible_variable'] < 0;
+        e.session.attributes["comparison"] = vars()['temporary_impossible_variable'] < 0;
         e.session.attributes["selection"] = 1;
          
         const notif = 'Ok, comparing '+a+" to "+b;
@@ -520,19 +505,19 @@ const handlers = {
         var e = this.event;
         var a, b;
 
-        if ('value' in slots(this)['num_a'])
-            a = sv(this, 'num_a');
-        else if ('value' in slots(this)['var_a'])
-            a = sv(this, 'var_a');
+        if ('value' in slots()['num_a'])
+            a = sv('num_a');
+        else if ('value' in slots()['var_a'])
+            a = sv('var_a');
 
-        if ('value' in slots(this)['num_b'])
-            b = sv(this, 'num_b');
-        else if ('value' in slots(this)['var_b'])
-            b = sv(this, 'var_b');
+        if ('value' in slots()['num_b'])
+            b = sv('num_b');
+        else if ('value' in slots()['var_b'])
+            b = sv('var_b');
 
-        do_arith(this, '-', a, b, 'temporary_impossible_variable');
+        do_arith('-', a, b, 'temporary_impossible_variable');
 
-        e.session.attributes["comparison"] = vars(this)['temporary_impossible_variable'] > 0;
+        e.session.attributes["comparison"] = vars()['temporary_impossible_variable'] > 0;
         e.session.attributes["selection"] = 1;
          
         const notif = 'Ok, comparing '+a+" to "+b;
@@ -562,12 +547,12 @@ const handlers = {
         );
     },
     'say': function () {
-        var notif = sv(this, "output");
+        var notif = sv("output");
         const re_prompt = this.t('RE_PROMPTS')[rand(4)];
         let e = this.event;
-        if (isRepeat(this)) {
+        if (isRepeat()) {
             let obj = { 'say': { 'out': notif } };
-            remember(this, obj);
+            remember(obj);
             notif = " ";
         }
         this.emit(":askWithCard"
@@ -578,7 +563,7 @@ const handlers = {
         );
     },
     'play_audio': function(){
-        const sound = sv(this, "animal");
+        const sound = sv("animal");
         var file = "";
         const re_prompt = this.t('RE_PROMPTS')[rand(4)];
         let e = this.event;
@@ -599,9 +584,9 @@ const handlers = {
                 file = "<audio src=\"https://s3-eu-west-1.amazonaws.com/testingaudio/meow.mp3\"></audio>";
         }
         
-        if (isRepeat(this)) {
+        if (isRepeat()) {
             let obj = { 'play': { 'sound': sound, 'file': file } };
-            remember(this, obj);
+            remember(obj);
             file = " ";
         }
         
@@ -617,10 +602,10 @@ const handlers = {
     },
     'print': function(){
         let e = this.event;
-        const variable = sv(this, "var");
-        const val = ( variable in e.session.attributes["vars"] ) ? e.session.attributes["vars"][variable]:"undefined";
+        const variable = sv("var");
+        const val = (( variable in e.session.attributes["vars"] ) ? e.session.attributes["vars"][variable] : "undefined");
         const re_prompt = this.t('RE_PROMPTS')[rand(4)];
-        let notif = variable+ " is "+ val; 
+        let notif = variable + " is " + val + ".";
         this.emit(":askWithCard"
             , (notif)
             , (re_prompt)
